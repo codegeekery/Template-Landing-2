@@ -14,7 +14,7 @@ const FAQ = () => {
         <>
 
             <React.Fragment>
-                <Accordion type="single" collapsible className="text-black flex flex-col justify-center container translate-y-32">
+                <Accordion type="single" collapsible className="text-black flex flex-col justify-center container translate-y-24">
                     <h1 className="text-2xl font-bold">FAQ</h1>
                     <AccordionItem value="item-1">
                         <AccordionTrigger>¿Es accesible?</AccordionTrigger>

@@ -1,4 +1,4 @@
-import { FaTwitterSquare, FaFacebookSquare, FaSnapchatSquare } from 'react-icons/fa';
+import { BsTwitterX,BsInstagram,BsMeta } from 'react-icons/bs';
 
 
 const Footer = () => {
@@ -16,9 +16,9 @@ const Footer = () => {
                         <p>Why are you even reading this?! There&apos;s never anything interesting in the footer!</p>
                     </div>
                     <ul className="flex ml-auto">
-                        <li className="mr-4"><a href="#"><FaTwitterSquare size="2em" /></a></li>
-                        <li className="mr-4"><a href="#"><FaFacebookSquare size="2em" /></a></li>
-                        <li><a href="#"><FaSnapchatSquare size="2em" /></a></li>
+                        <li className="mr-4"><a href="#"><BsTwitterX size="1.5em" /></a></li>
+                        <li className="mr-4"><a href="#"><BsMeta size="1.5em" /></a></li>
+                        <li><a href="#"><BsInstagram size="1.5em" /></a></li>
                     </ul>
                 </div>
             </footer>
