@@ -3,29 +3,30 @@ import { chromium } from "playwright";
 async function getReviewsFromPage(page) {
     const reviews = await page.evaluate(() => {
         const reviewElements = document.querySelectorAll(".jftiEf");
-        const reviewsData = [];
 
-        for (let i = 0; i < reviewElements.length && reviewsData.length < 6; i++) {
-            const el = reviewElements[i];
-            reviewsData.push({
-                name: el.querySelector(".d4r55")?.textContent.trim(),
-                content: el.querySelector(".wiI7pd")?.textContent.trim(),
-                date: el.querySelector(".rsqaWe")?.textContent.trim(),
-                ratings: parseFloat(el.querySelector(".kvMYJc")?.getAttribute("aria-label")),
-            });
-        }
-
-        return reviewsData;
+        return Array.from(reviewElements, el => ({
+            name: el.querySelector(".d4r55")?.textContent.trim(),
+            content: el.querySelector(".wiI7pd")?.textContent.trim(),
+            date: el.querySelector(".rsqaWe")?.textContent.trim(),
+            ratings: parseFloat(el.querySelector(".kvMYJc")?.getAttribute("aria-label")),
+        }));
     });
     return reviews;
 }
 
 async function scrollPage(page, scrollContainer) {
-    let lastHeight = await page.evaluate(`document.querySelector("${scrollContainer}").scrollHeight`);
+    let lastHeight = await page.evaluate((scrollContainer) => {
+        return document.querySelector(scrollContainer).scrollHeight;
+    }, scrollContainer);
+
     while (true) {
-        await page.evaluate(`document.querySelector("${scrollContainer}").scrollTo(0, document.querySelector("${scrollContainer}").scrollHeight)`);
-        await page.waitForTimeout(2000);
-        let newHeight = await page.evaluate(`document.querySelector("${scrollContainer}").scrollHeight`);
+        await page.evaluate((scrollContainer) => {
+            document.querySelector(scrollContainer).scrollTo(0, document.querySelector(scrollContainer).scrollHeight);
+        }, scrollContainer);
+        let newHeight = await page.evaluate((scrollContainer) => {
+            return document.querySelector(scrollContainer).scrollHeight;
+        }, scrollContainer);
+
         if (newHeight === lastHeight) {
             break;
         }
@@ -45,9 +46,8 @@ export const GET = async (request) => {
         });
         const page = await browser.newPage();
         await page.goto(placeUrl);
-        await page.waitForTimeout(1000);
+        await page.waitForSelector('button.VfPpkd-LgbsSe');
         await page.click('button.VfPpkd-LgbsSe');
-        await page.waitForTimeout(1000);
         await page.waitForSelector(".DxyBCb");
         await scrollPage(page, '.DxyBCb');
         const reviews = await getReviewsFromPage(page);
@@ -63,7 +63,6 @@ export const GET = async (request) => {
         });
 
     } catch (e) {
-        console.log(e)
         return new Response(JSON.stringify({ message: "error" }), {
             status: 500,
             headers: {
