@@ -63,6 +63,7 @@ export const GET = async (request) => {
         });
 
     } catch (e) {
+        console.log(e);
         return new Response(JSON.stringify({ message: "error" }), {
             status: 500,
             headers: {
